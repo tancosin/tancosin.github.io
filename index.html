@@ -22,7 +22,7 @@
           <div>
             <h1>Single photo</h1>
             <h4>Purchase a Pasha original photo</h4>
-            <div class="pasha-image">
+            <div class="pasha-image"> 
               <img
                 src="https://picsum.photos/280/320?random=4"
                 width="140"
@@ -49,9 +49,9 @@
 
     <script>
       // Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
-      var PUBLISHABLE_KEY = "pk_1234";
+      var PUBLISHABLE_KEY = "pk_test_bsBxcsrhXkhJ43G6C2TU4Mc100oD6qhmRc";
       // Replace with the domain you want your users to be redirected back to after payment
-      var DOMAIN = window.location.origin;
+      var DOMAIN = tancosin.com;
       // Replace with a Price for your own product (created either in the Stripe Dashboard or with the API)
       // You can also supply a SKU or Plan ID for 
       var PRICE_ID = "price_1234";
@@ -62,7 +62,7 @@
         );
       }
 
-      if (PRICE_ID === "price_1234") {
+      if (PRICE_ID === "price_1HTIpZHpDpLEWCouSn8dZHks") {
         console.log(
           "Replace the hardcoded SKU ID with your own SKU: https://stripe.com/docs/api/skus"
         );
