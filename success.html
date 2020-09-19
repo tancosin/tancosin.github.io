@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Stripe Checkout Sample</title>
-    <meta name="description" content="A demo of Stripe Payment Intents" />
+    <meta name="description" content="A demo of Stripe client-only Checkout" />
 
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="css/normalize.css" />
@@ -15,7 +15,7 @@
     <div class="sr-root">
       <div class="sr-main">
         <header class="sr-header">
-          <div class="sr-header__logo"></div>
+          <a href="./" class="sr-header__logo"></a>
         </header>
         <div class="sr-payment-summary completed-view">
           <h1>Your test payment succeeded</h1>
@@ -47,16 +47,6 @@
       </div>
     </div>
     <script>
-      // Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
-      var PUBLISHABLE_KEY = "pk_1234";
-      
-      if (PUBLISHABLE_KEY === "pk_1234") {
-        console.log(
-          "Replace the hardcoded publishable key with your own publishable key: https://dashboard.stripe.com/test/apikeys"
-        );
-      }
-
-      var stripe = Stripe(PUBLISHABLE_KEY);
       var urlParams = new URLSearchParams(window.location.search);
 
       if (urlParams.has("session_id")) {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Stripe Checkout Sample</title>
-    <meta name="description" content="A demo of Stripe Payment Intents" />
+    <meta name="description" content="A demo of Stripe client-only Checkout" />
 
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="css/normalize.css" />
@@ -14,134 +14,99 @@
 
   <body>
     <div class="sr-root">
-      <div class="sr-main">
+      <div class="sr-main" style="display: flex;">
         <header class="sr-header">
           <div class="sr-header__logo"></div>
         </header>
-        <section class="container">
-          <div>
-            <h1>Single photo</h1>
-            <h4>Purchase a Pasha original photo</h4>
-            <div class="pasha-image"> 
-              <img
-                src="https://picsum.photos/280/320?random=4"
-                width="140"
-                height="160"
-              />
-            </div>
-          </div>
-          <div class="quantity-setter">
-            <button class="increment-btn" id="subtract" disabled>
-              -
+        <div class="sr-container">
+          <section class="container">
+            <h1>One-time Donation</h1>
+            <button
+              data-checkout-mode="payment"
+              data-price-id="sku_GU4JYXyvvRb2sX"
+            >
+              Donate $5.00 once
             </button>
-            <input type="number" id="quantity-input" min="1" value="1" />
-            <button class="increment-btn" id="add">+</button>
-          </div>
-          <p class="sr-legal-text">Number of copies (max 10)</p>
-
-          <button id="basic-photo-button">
-            Buy for $<span id="total">5</span>.00
-          </button>
-        </section>
+            <button
+              data-checkout-mode="payment"
+              data-price-id="sku_GU4KO8nfdg8G2Z"
+            >
+              Donate $15.00 once
+            </button>
+            <button
+              data-checkout-mode="payment"
+              data-price-id="sku_GU4LB0wBViiYsm"
+            >
+              Donate $50.00 once
+            </button>
+          </section>
+          <section class="container">
+            <h1>Recurring Donation</h1>
+            <button
+              data-checkout-mode="subscription"
+              data-price-id="plan_GU4MXg0k0Uv1S6"
+            >
+              Donate $20.00 per month
+            </button>
+          </section>
+        </div>
         <div id="error-message"></div>
       </div>
+    </div>
+    <div class="banner">
+      <span>
+        This is a
+        <a href="https://github.com/stripe-samples"> Stripe Sample </a> on how
+        to use Stripe Checkout on GitHub Pages.
+        <a
+          href="https://github.com/stripe-samples/github-pages-stripe-checkout"
+        >
+          View code on GitHub.
+        </a>
+      </span>
     </div>
 
     <script>
       // Replace with your own publishable key: https://dashboard.stripe.com/test/apikeys
-      var PUBLISHABLE_KEY = "pk_test_bsBxcsrhXkhJ43G6C2TU4Mc100oD6qhmRc";
+      var PUBLISHABLE_KEY = 'pk_test_Tr8olTkdFnnJVywwhNPHwnHK00HkHV4tnP';
       // Replace with the domain you want your users to be redirected back to after payment
-      var DOMAIN = http://tancosin.com;
-      // Replace with a Price for your own product (created either in the Stripe Dashboard or with the API)
-      // You can also supply a SKU or Plan ID for 
-      var PRICE_ID = "price_1HTIpZHpDpLEWCouSn8dZHks";
+      var DOMAIN = location.href.replace(/[^/]*$/, '');
 
-      if (PUBLISHABLE_KEY === "pk_1234") {
+      if (PUBLISHABLE_KEY === 'pk_test_Tr8olTkdFnnJVywwhNPHwnHK00HkHV4tnP') {
         console.log(
-          "Replace the hardcoded publishable key with your own publishable key: https://dashboard.stripe.com/test/apikeys"
+          'Replace the hardcoded publishable key with your own publishable key: https://dashboard.stripe.com/test/apikeys'
         );
       }
-
-      if (PRICE_ID === "price_1234") {
-        console.log(
-          "Replace the hardcoded SKU ID with your own SKU: https://stripe.com/docs/api/skus"
-        );
-      }
-
-      var MIN_PHOTOS = 1;
-      var MAX_PHOTOS = 10;
 
       var stripe = Stripe(PUBLISHABLE_KEY);
 
-      var basicPhotoButton = document.getElementById("basic-photo-button");
-      document
-        .getElementById("quantity-input")
-        .addEventListener("change", function(evt) {
-          // Ensure customers only buy between 1 and 10 photos
-          if (evt.target.value < MIN_PHOTOS) {
-            evt.target.value = MIN_PHOTOS;
-          }
-          if (evt.target.value > MAX_PHOTOS) {
-            evt.target.value = MAX_PHOTOS;
-          }
-        });
-
-      var updateQuantity = function(evt) {
-        if (evt && evt.type === "keypress" && evt.keyCode !== 13) {
-          return;
-        }
-
-        var isAdding = evt.target.id === "add";
-        var inputEl = document.getElementById("quantity-input");
-        var currentQuantity = parseInt(inputEl.value);
-
-        document.getElementById("add").disabled = false;
-        document.getElementById("subtract").disabled = false;
-
-        var quantity = isAdding ? currentQuantity + 1 : currentQuantity - 1;
-
-        inputEl.value = quantity;
-        document.getElementById("total").textContent = quantity * 5;
-
-        // Disable the button if the customers hits the max or min
-        if (quantity === MIN_PHOTOS) {
-          document.getElementById("subtract").disabled = true;
-        }
-        if (quantity === MAX_PHOTOS) {
-          document.getElementById("add").disabled = true;
-        }
-      };
-
-      Array.from(document.getElementsByClassName("increment-btn")).forEach(
-        element => {
-          element.addEventListener("click", updateQuantity);
-        }
-      );
-
       // Handle any errors from Checkout
-      var handleResult = function(result) {
+      var handleResult = function (result) {
         if (result.error) {
-          var displayError = document.getElementById("error-message");
+          var displayError = document.getElementById('error-message');
           displayError.textContent = result.error.message;
         }
       };
 
-      basicPhotoButton.addEventListener("click", function() {
-        var quantity = parseInt(
-          document.getElementById("quantity-input").value
-        );
+      document.querySelectorAll('button').forEach(function (button) {
+        button.addEventListener('click', function (e) {
+          var mode = e.target.dataset.checkoutMode;
+          var priceId = e.target.dataset.priceId;
+          var items = [{ price: priceId, quantity: 1 }];
 
-        // Make the call to Stripe.js to redirect to the checkout page
-        // with the current quantity
-        stripe
-          .redirectToCheckout({
-            mode: 'payment',
-            lineItems: [{ price: PRICE_ID, quantity: quantity }],
-            successUrl:
-              DOMAIN + "/success.html?session_id={CHECKOUT_SESSION_ID}",
-            cancelUrl: DOMAIN + "/canceled.html"
-          })
-          .then(handleResult);
+          // Make the call to Stripe.js to redirect to the checkout page
+          // with the sku or plan ID.
+          stripe
+            .redirectToCheckout({
+              mode: mode,
+              lineItems: items,
+              successUrl:
+                DOMAIN + 'success.html?session_id={CHECKOUT_SESSION_ID}',
+              cancelUrl:
+                DOMAIN + 'canceled.html?session_id={CHECKOUT_SESSION_ID}',
+            })
+            .then(handleResult);
+        });
       });
     </script>
   </body>

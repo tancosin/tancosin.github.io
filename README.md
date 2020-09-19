@@ -1,35 +1,64 @@
-# Accept payments with Stripe Checkout (client-only integration)
+# GitHub Payment Pages with Stripe Checkout
 
-You can create Checkout pages without a server by creating Products and Prices in the Stripe Dashboard before launching your integration. Then pass the Price ID of your Product to `stripe.redirectToCheckout` on the client when your customer checks out.
+This is an example of a client-only (server-free) donation payment page that can be hosted on GitHub using Stripe Checkout.
 
-<img src="https://storage.googleapis.com/stripe-samples-flow-charts/checkout-one-time-client-only.png" alt="A flowchart of the Checkout flow" align="center">
+You can see this repository running on [GitHub Pages](https://pages.github.com/) here: https://stripe-samples.github.io/github-pages-stripe-checkout
+<img src="./demo.gif" alt="A gif of the Checkout payment page rendering" align="center">
 
 ## Setup
 
+- Create Stripe Account: https://dashboard.stripe.com/register
 - Enable client-only checkout: https://dashboard.stripe.com/account/checkout/settings
 - Create a one-time or recurring product in the Stripe Dashboard: https://dashboard.stripe.com/products
-  - After creation click the "Use with checkout" button and copy the price (price_xxx) ID.
-  - Paste the price ID into the `PRICE_ID` var in the index.html file.
+  - After creation click the "Use with checkout" button and copy the price ID
+  - Paste the IDs into the button `data-price-id` attributes.
 - Copy your publishable key from: https://dashboard.stripe.com/apikeys and set it as the value for `PUBLISHABLE_KEY` in the index.html file
 
 ## Run locally
 
-From the project directory, navigate to this folder:
-
-    cd client-only/client
-
 Since these are all static assets you can serve them locally with a simple web server, e.g.
 
-    python -m SimpleHTTPServer 4242
+Python 2
 
-You can now view your page at http://localhost:4242
+    python -m SimpleHTTPServer 8888
+    
+Python 3
+
+    python -m http.server 8888
+
+You can now view your page at http://localhost:8888
 
 If you're getting an error running this command, see more detailed insturctions on [MDN](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server).
 
 ## Go live
 
-- Add your domain name to the whitelist in https://dashboard.stripe.com/account/checkout/settings
-- Replace the test publishable key `PUBLISHABLE_KEY` in the index.html file with your pk_live_xxx key which can be found here: https://dashboard.stripe.com/test/apikeys
-  - (!!!**NOTE**!!!: never paste in your secret key! For client-only Checkout only the publishable key is needed!)
-- Upload the files in this `client` folder to your hosting provider (there are many options available for static page hosting).
-  - One convenient way is using [GitHub Pages](https://pages.github.com/). You can find an example for that here: https://github.com/stripe-samples/github-pages-stripe-checkout
+- Add `username.github.io` (replace username with your github user name) to the domain whitelist in https://dashboard.stripe.com/account/checkout/settings
+- Replace the test publishable key `PUBLISHABLE_KEY` in the index.html file with your pk\*live_xxx key which can be found here: https://dashboard.stripe.com/test/apikeys (!!!**NOTE**!!!: never paste in your secret key! For client-only Checkout only the publishable key is needed!)
+- Commit the changes to the `gh-pages` branch and push them to GitHub.
+- Done, you can now accept live payments on your GitHub pages \o/
+
+## More Checkout Samples
+
+- [checkout-one-time-payments](https://github.com/stripe-samples/checkout-one-time-payments)
+- [checkout-single-subscription](https://github.com/stripe-samples/checkout-single-subscription)
+- [checkout-subscription-and-add-on](https://github.com/stripe-samples/checkout-subscription-and-add-on)
+
+## FAQ
+
+Q: Why did you pick these frameworks?
+
+A: We chose the most minimal framework to convey the key Stripe calls and concepts you need to understand. These demos are meant as an educational tool that helps you roadmap how to integrate Stripe within your own system independent of the framework.
+
+## Get support
+If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
+
+If you have questions, comments, or need help with code, we're here to help:
+- on [IRC via freenode](https://webchat.freenode.net/?channel=#stripe)
+- on Twitter at [@StripeDev](https://twitter.com/StripeDev)
+- on Stack Overflow at the [stripe-payments](https://stackoverflow.com/tags/stripe-payments/info) tag
+- by [email](mailto:support+github@stripe.com)
+
+## Author(s)
+
+- [@adreyfus-stripe](https://twitter.com/adrind)
+- [@thorsten-stripe](https://twitter.com/thorwebdev)
